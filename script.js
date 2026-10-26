@@ -1,15 +1,15 @@
-// script.js
 import { Board } from "./components/Board.js";
 import { Header } from "./components/ui/Header.js";
 import { Task } from "./models/TaskModel.js";
 import { BoardModel } from "./models/BoardModel.js";
 import { loadTasks, saveBoard } from "./scripts/storage.js";
-import { addTask, addTaskShow, showAndHiddenTaskOptions, toggleAlarmForm } from "./scripts/task.js";
+import { setTaskSelected, addTask, addTaskShow, showAndHiddenTaskOptions, toggleAlarmForm } from "./scripts/task.js";
 import { Alarm } from "./models/AlarmModel.js";
 import { collectDueAlarms } from "./scripts/alarm.js";
 
 const app = document.querySelector("#app");
 const board = new BoardModel();
+const selectedTaskIds = [];
 
 const savedTasks = loadTasks();
 const initialTasks = savedTasks ?? [];
@@ -19,6 +19,7 @@ initialTasks.forEach((task) => {
 });
 
 function render() {
+	selectedTaskIds.length = 0;
 	app.innerHTML = `
     ${Header()}
     ${Board(board.getTasks())}
@@ -117,7 +118,25 @@ app.addEventListener("input", (event) => {
 });
 
 window.addTaskShow = addTaskShow;
+window.setTaskSelected = (checkbox) => {
+	setTaskSelected(checkbox, selectedTaskIds);
+};
 window.showAndHiddenTaskOptions = showAndHiddenTaskOptions;
+
+window.applySelectedTasksStatus = (button) => {
+	const section = button.closest(".board-section");
+	if (!section || selectedTaskIds.length === 0) return;
+
+	const updatedCount = board.updateTasksStatus(
+		selectedTaskIds,
+		section.dataset.status
+	);
+
+	if (updatedCount === 0) return;
+
+	saveBoard(board);
+	render();
+};
 
 window.moveDownTask = (taskId) => {
 	if (!board.moveTask(taskId, "down")) {

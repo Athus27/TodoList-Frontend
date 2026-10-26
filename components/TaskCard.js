@@ -1,6 +1,20 @@
 export function TaskCard(task) {
 	return `
-        <div class="task-card">
+        <div class="task-card" data-selected="false">
+            <label class="task-selector" title="Selecionar tarefa">
+                <input
+                    class="task-selector-input"
+                    type="checkbox"
+                    data-task-id="${task.id}"
+                    onchange="setTaskSelected(this)"
+                    aria-label="Selecionar tarefa"
+                >
+                <img
+                    class="select-task-icon"
+                    src="../assets/icons/checkVazio.svg"
+                    alt=""
+                >
+            </label>
             <div class="task-content">
                <div class="task-info">
                 <h2>${task.title}</h2>

@@ -3,7 +3,6 @@ import { saveBoard } from "./storage.js";
 
 export function addTaskShow() {
 	console.log("addtask");
-	//components/TaskForm.js
 	const taskForm = document.querySelector(".add-task-form");
 
 	const addTaskBtn = document.querySelector(".add-task-btn");
@@ -16,6 +15,35 @@ export function addTaskShow() {
 		default:
 			taskForm.style.display = "block";
 			break;
+	}
+}
+
+export function updateSelectedTaskIds(selectedTaskIds, taskId, isSelected) {
+	const currentIndex = selectedTaskIds.indexOf(taskId);
+
+	if (isSelected && currentIndex === -1) {
+		selectedTaskIds.push(taskId);
+	}
+
+	if (!isSelected && currentIndex !== -1) {
+		selectedTaskIds.splice(currentIndex, 1);
+	}
+}
+
+export function setTaskSelected(checkbox, selectedTaskIds) {
+	const taskCard = checkbox.closest(".task-card");
+	if (!taskCard) return;
+
+	const taskId = Number(checkbox.dataset.taskId);
+	const isSelected = checkbox.checked;
+	const icon = taskCard.querySelector(".select-task-icon");
+
+	updateSelectedTaskIds(selectedTaskIds, taskId, isSelected);
+	taskCard.dataset.selected = String(isSelected);
+	if (icon) {
+		icon.src = isSelected
+			? "../assets/icons/checkPreenchido.svg"
+			: "../assets/icons/checkVazio.svg";
 	}
 }
 

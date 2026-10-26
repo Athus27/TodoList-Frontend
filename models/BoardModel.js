@@ -80,6 +80,24 @@ export class BoardModel {
 		return true;
 	}
 
+	updateTasksStatus(taskIds, status) {
+		const validStatuses = ["ToDo", "Doing", "Done"];
+		if (!validStatuses.includes(status)) return 0;
+
+		const selectedIds = new Set(taskIds);
+		let updatedCount = 0;
+
+		for (const task of this.tasks) {
+			if (!selectedIds.has(task.id)) continue;
+
+			task.status = status;
+			updatedCount++;
+		}
+
+		this.orderTasksBySection(this.tasks);
+		return updatedCount;
+	}
+
 	addAlarm(taskId, alarm) {
 		const task = this.getTask(taskId);
 
