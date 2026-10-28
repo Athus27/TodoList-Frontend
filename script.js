@@ -1,15 +1,27 @@
 import { Board } from "./components/Board.js";
 import { Header } from "./components/ui/Header.js";
+import { EmailSettingsPanel } from "./components/EmailSettingsPanel.js";
+import { dropdownMenu,showEmailSettings } from "./scripts/header.js";
 import { Task } from "./models/TaskModel.js";
 import { BoardModel } from "./models/BoardModel.js";
-import { loadTasks, saveBoard } from "./scripts/storage.js";
+import { EmailSettingsModel } from "./models/EmailSettingsModel.js";
+import { loadTasks, saveBoard, loadEmailSettings, saveEmailSettings } from "./scripts/storage.js";
 import { setTaskSelected, addTask, addTaskShow, showAndHiddenTaskOptions, toggleAlarmForm } from "./scripts/task.js";
 import { Alarm } from "./models/AlarmModel.js";
 import { collectDueAlarms } from "./scripts/alarm.js";
+import { sendDeadlineEmail } from "./scripts/email/email-service.js";
+import { processDueEmailNotifications } from "./scripts/email/email-scheduler.js";
 
 const app = document.querySelector("#app");
 const board = new BoardModel();
+
 const selectedTaskIds = [];
+let isTaskEmailModeOpen = false;
+const pendingEmailTaskIds = new Set();
+
+const savedEmails = loadEmailSettings();
+const emailSettings = new EmailSettingsModel(savedEmails ?? {});
+
 
 const savedTasks = loadTasks();
 const initialTasks = savedTasks ?? [];
@@ -22,12 +34,32 @@ function render() {
 	selectedTaskIds.length = 0;
 	app.innerHTML = `
     ${Header()}
-    ${Board(board.getTasks())}
+    ${EmailSettingsPanel()}
+    ${Board(board.getTasks(), emailSettings.recipients, isTaskEmailModeOpen)}
     `;
 }
 
 app.addEventListener("submit", (event) => {
 	const form = event.target;
+
+	if (form.id === "emailSettingsForm") {
+		event.preventDefault();
+
+		const recipient = emailSettings.addRecipient({
+			name: form.elements.recipientName.value,
+			email: form.elements.recipientEmail.value
+		});
+
+		if (!recipient) {
+			alert("Esse e-mail já está cadastrado.");
+			return;
+		}
+
+		saveEmailSettings(emailSettings);
+		form.reset();
+		alert("E-mail cadastrado com sucesso.");
+		return;
+	}
 
 	if (form.id === "taskForm") {
 		event.preventDefault();
@@ -116,12 +148,64 @@ app.addEventListener("input", (event) => {
 		timeStyle: "short"
 	})}`;
 });
-
+window.dropdownMenu = dropdownMenu;
+window.showEmailSettings = showEmailSettings;
 window.addTaskShow = addTaskShow;
 window.setTaskSelected = (checkbox) => {
 	setTaskSelected(checkbox, selectedTaskIds);
 };
 window.showAndHiddenTaskOptions = showAndHiddenTaskOptions;
+
+window.toggleTaskEmailMode = () => {
+	isTaskEmailModeOpen = !isTaskEmailModeOpen;
+	render();
+};
+
+window.setTaskEmailRecipient = (taskId, recipientValue) => {
+	const task = board.getTask(taskId);
+	if (!task) return;
+
+	const recipientId = recipientValue ? Number(recipientValue) : null;
+	const recipientExists = emailSettings.recipients.some(
+		(recipient) => recipient.id === recipientId
+	);
+
+	board.updateTaskEmailSettings(taskId, {
+		enabled: recipientExists ? task.emailNotificationEnabled : false,
+		recipientId: recipientExists ? recipientId : null
+	});
+
+	if (recipientExists) {
+		emailSettings.lastRecipientId = recipientId;
+	}
+
+	saveBoard(board);
+	saveEmailSettings(emailSettings);
+	render();
+};
+
+window.toggleTaskEmailNotification = (taskId) => {
+	const task = board.getTask(taskId);
+	if (!task) return;
+
+	const recipientId = task.emailRecipientId ?? emailSettings.lastRecipientId;
+	const recipientExists = emailSettings.recipients.some(
+		(recipient) => recipient.id === recipientId
+	);
+
+	if (!task.emailNotificationEnabled && !recipientExists) {
+		alert("Cadastre e selecione um destinatário antes de ligar o aviso.");
+		return;
+	}
+
+	board.updateTaskEmailSettings(taskId, {
+		enabled: !task.emailNotificationEnabled,
+		recipientId
+	});
+
+	saveBoard(board);
+	render();
+};
 
 window.applySelectedTasksStatus = (button) => {
 	const section = button.closest(".board-section");
@@ -197,6 +281,31 @@ window.deleteAlarm = (taskId, alarmId) => {
 window.board = board;
 
 render();
+
+async function checkDueEmailNotifications() {
+	const result = await processDueEmailNotifications({
+		board,
+		emailSettings,
+		pendingTaskIds: pendingEmailTaskIds,
+		sendEmail: sendDeadlineEmail,
+		saveBoard
+	});
+
+	if (!result) return;
+
+	if (result.status === "sent") {
+		console.info(`E-mail enviado para a tarefa: ${result.task.title}`);
+		return;
+	}
+
+	console.error(
+		`Falha ao enviar e-mail da tarefa: ${result.task.title}`,
+		result.error
+	);
+}
+
+checkDueEmailNotifications();
+setInterval(checkDueEmailNotifications, 60_000);
 
 setInterval(() => {
 	const triggeredAlarms = collectDueAlarms(board);

@@ -131,4 +131,21 @@ export class BoardModel {
 
 		return true;
 	}
+
+	updateTaskEmailSettings(taskId, { enabled, recipientId }) {
+		const task = this.getTask(taskId);
+		if (!task) return false;
+
+		task.emailNotificationEnabled = enabled;
+		task.emailRecipientId = recipientId;
+		return true;
+	}
+
+	markEmailNotificationSent(taskId, dueDate) {
+		const task = this.getTask(taskId);
+		if (!task || task.dueDate !== dueDate) return false;
+
+		task.emailNotifiedDueDate = dueDate;
+		return true;
+	}
 }

@@ -26,6 +26,56 @@
 	filter: brightness(0) invert(1);
 }
 
+.task-email-indicator {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.85rem;
+}
+
+.task-email-indicator img {
+	width: 22px;
+	height: 22px;
+	filter: brightness(0) invert(1);
+}
+
+.task-email-settings {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: end;
+	gap: 8px;
+	margin-top: 10px;
+	padding: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 6px;
+}
+
+.task-email-settings label {
+	grid-column: 1 / -1;
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+.task-email-recipient {
+	min-width: 0;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+}
+
+.task-card .task-email-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px;
+	cursor: pointer;
+}
+
+.task-email-toggle img {
+	width: 36px;
+	height: 36px;
+}
+
 .task-options {
 	width: 40%;
 	color: var(--dark-gray);

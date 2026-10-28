@@ -3,6 +3,9 @@
 
 @import "./components/ui/Header.css";
 @import "./components/Board.css";
+
+@import "./components/EmailSettingsPanel.css";
+
 @import "./components/TaskCard.css";
 
 body {

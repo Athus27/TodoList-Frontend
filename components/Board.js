@@ -1,6 +1,6 @@
 import { TaskCard } from "./TaskCard.js";
 
-export function Board(tasks) {
+export function Board(tasks, recipients = [], isTaskEmailModeOpen = false) {
 	return `
 		<section class="board">
 			<div class="board-header">
@@ -8,6 +8,15 @@ export function Board(tasks) {
 					<h1>My Board</h1>		
 				</div>
 				<div class="control-buttons">
+					<button
+						type="button"
+						class="task-email-mode-btn"
+						onclick="toggleTaskEmailMode()"
+						title="Configurar avisos por e-mail"
+						aria-label="Configurar avisos por e-mail"
+					>
+						<img src="../assets/icons/mail.svg" alt="">
+					</button>
 					<button class="add-task-btn" onClick="addTaskShow()">+</button>
 				</div>
 			</div>
@@ -30,14 +39,14 @@ export function Board(tasks) {
 				</form>
 			</div>
 
-			${renderBoardSection(tasks, "ToDo", "ToDo", "todo")}
-			${renderBoardSection(tasks, "Doing", "Doing", "doing")}
-			${renderBoardSection(tasks, "Done", "Done", "done")}
+			${renderBoardSection(tasks, "ToDo", "ToDo", "todo", recipients, isTaskEmailModeOpen)}
+			${renderBoardSection(tasks, "Doing", "Doing", "doing", recipients, isTaskEmailModeOpen)}
+			${renderBoardSection(tasks, "Done", "Done", "done", recipients, isTaskEmailModeOpen)}
 		</section>
 	`;
 }
 
-function renderBoardSection(tasks, status, title, className) {
+function renderBoardSection(tasks, status, title, className, recipients, isTaskEmailModeOpen) {
 	return `
 		<div class="board-section ${className}" data-status="${status}">
 			<div class="board-section-header">
@@ -53,15 +62,15 @@ function renderBoardSection(tasks, status, title, className) {
 				</button>
 			</div>
 			<ul class="task-list">
-				${renderTasksByStatus(tasks, status)}
+				${renderTasksByStatus(tasks, status, recipients, isTaskEmailModeOpen)}
 			</ul>
 		</div>
 	`;
 }
 
-function renderTasksByStatus(tasks, status) {
+function renderTasksByStatus(tasks, status, recipients, isTaskEmailModeOpen) {
 	return tasks
 		.filter((task) => task.status === status)
-		.map((task) => `<li>${TaskCard(task)}</li>`)
+		.map((task) => `<li>${TaskCard(task, recipients, isTaskEmailModeOpen)}</li>`)
 		.join("");
 }

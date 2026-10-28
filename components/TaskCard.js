@@ -1,4 +1,4 @@
-export function TaskCard(task) {
+export function TaskCard(task, recipients = [], isTaskEmailModeOpen = false) {
 	return `
         <div class="task-card" data-selected="false">
             <label class="task-selector" title="Selecionar tarefa">
@@ -27,6 +27,8 @@ export function TaskCard(task) {
                         >
                         <span>Due Date: ${formatDate(task.dueDate)}</span>
                     </p>
+                    ${renderEmailIndicator(task)}
+					${renderEmailSettings(task, recipients, isTaskEmailModeOpen)}
                 </div>
                 <div class="task-controls">
                     <button class="showView" onClick=showAndHiddenTaskOptions(this)><img class = "icon" src = "../assets/icons/addTask.svg"></button>
@@ -66,6 +68,70 @@ export function TaskCard(task) {
             </div>
         </div>
     `;
+}
+
+function renderEmailIndicator(task) {
+	if (!task.emailNotificationEnabled || task.emailRecipientId == null) {
+		return "";
+	}
+
+	return `
+		<p class="task-email-indicator">
+			<img src="../assets/icons/mailSend.svg" alt="">
+			<span>E-mail programado para 24 horas antes, data: ${formatEmailScheduledAt(task)}</span>
+		</p>
+	`;
+}
+
+function formatEmailScheduledAt(task) {
+	const dueDate = new Date(task.dueDate);
+	const scheduledAt = new Date(dueDate.getTime() - 24 * 60 * 60 * 1000);
+
+	return scheduledAt.toLocaleString("pt-BR", {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+		hour: "2-digit",
+		minute: "2-digit"
+	}).replace(",", " às");
+}
+
+function renderEmailSettings(task, recipients, isOpen) {
+	if (!isOpen) return "";
+
+	const options = recipients
+		.map((recipient) => `
+			<option value="${recipient.id}"${recipient.id === task.emailRecipientId ? " selected" : ""}>
+				${recipient.name} (${recipient.email})
+			</option>
+		`)
+		.join("");
+
+	const toggleIcon = task.emailNotificationEnabled ? "on.svg" : "of.svg";
+	const toggleLabel = task.emailNotificationEnabled ? "Desligar aviso" : "Ligar aviso";
+
+	return `
+		<div class="task-email-settings">
+			<label for="task-email-recipient-${task.id}">Enviar e-mail 24h antes</label>
+			<select
+				id="task-email-recipient-${task.id}"
+				class="task-email-recipient"
+				onchange="setTaskEmailRecipient(${task.id}, this.value)"
+			>
+				<option value="">Selecione um destinatário</option>
+				${options}
+			</select>
+			<button
+				type="button"
+				class="task-email-toggle"
+				onclick="toggleTaskEmailNotification(${task.id})"
+				aria-label="${toggleLabel}"
+				title="${toggleLabel}"
+			>
+				<img src="../assets/icons/${toggleIcon}" alt="">
+			</button>
+		</div>
+	`;
 }
 
 function formatDate(dateTime) {

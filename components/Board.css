@@ -32,6 +32,21 @@
 	flex-direction: row;
 	gap: 0.5rem;
 }
+
+.task-email-mode-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px;
+	background: transparent;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.task-email-mode-btn:hover {
+	background-color: rgba(40, 58, 70, 0.1);
+}
 .add-task-form {
 	display: none;
 	flex-direction: column;

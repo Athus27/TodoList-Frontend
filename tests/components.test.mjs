@@ -13,6 +13,14 @@ test("renderiza um botão de destino para cada status", () => {
 	assert.match(html, /data-status="Done"/);
 });
 
+test("renderiza o botão que abre a configuração de e-mail das tarefas", () => {
+	const html = Board([]);
+
+	assert.match(html, /class="task-email-mode-btn"/);
+	assert.match(html, /onclick="toggleTaskEmailMode\(\)"/);
+	assert.match(html, /assets\/icons\/mail\.svg/);
+});
+
 test("renderiza checkbox identificado pelo ID da tarefa", () => {
 	const html = TaskCard({
 		id: 42,
@@ -38,4 +46,58 @@ test("o nome da tarefa não é interpolado nos atributos do seletor", () => {
 
 	assert.match(html, /aria-label="Selecionar tarefa"/);
 	assert.doesNotMatch(html, /aria-label="Selecionar Revisar/);
+});
+
+test("exibe seletor de destinatário e toggle no modo de configuração", () => {
+	const html = TaskCard(
+		{
+			id: 8,
+			title: "Entregar projeto",
+			description: "TODO List",
+			dueDate: "2026-10-30T18:00",
+			alarms: [],
+			emailNotificationEnabled: false,
+			emailRecipientId: 2
+		},
+		[
+			{ id: 1, name: "Ana", email: "ana@example.com" },
+			{ id: 2, name: "Athus", email: "athus@example.com" }
+		],
+		true
+	);
+
+	assert.match(html, /class="task-email-settings"/);
+	assert.match(html, /Enviar e-mail 24h antes/);
+	assert.match(html, /onchange="setTaskEmailRecipient\(8, this\.value\)"/);
+	assert.match(html, /value="2" selected/);
+	assert.match(html, /assets\/icons\/of\.svg/);
+});
+
+test("oculta os controles de e-mail fora do modo de configuração", () => {
+	const html = TaskCard(
+		{ id: 8, title: "Tarefa", description: "", dueDate: "", alarms: [] },
+		[],
+		false
+	);
+
+	assert.doesNotMatch(html, /class="task-email-settings"/);
+});
+
+test("exibe indicador quando a tarefa possui aviso de e-mail ativo", () => {
+	const html = TaskCard({
+		id: 8,
+		title: "Tarefa",
+		description: "",
+		dueDate: "2026-10-30T18:00",
+		alarms: [],
+		emailNotificationEnabled: true,
+		emailRecipientId: 2
+	});
+
+	assert.match(html, /class="task-email-indicator"/);
+	assert.match(html, /assets\/icons\/mailSend\.svg/);
+	assert.match(
+		html,
+		/E-mail programado para 24 horas antes, data: 29\/10\/2026 às 18:00/
+	);
 });

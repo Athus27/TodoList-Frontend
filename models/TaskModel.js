@@ -26,6 +26,9 @@ export class Task {
 		this.description = parameters.description || "";
 		this.dueDate = parameters.dueDate || "";
 		this.status = parameters.status || "ToDo";
+		this.emailNotificationEnabled = parameters.emailNotificationEnabled ?? false;
+		this.emailRecipientId = parameters.emailRecipientId ?? null;
+		this.emailNotifiedDueDate = parameters.emailNotifiedDueDate ?? null;
 	}
 
 	addAlarm(alarm){

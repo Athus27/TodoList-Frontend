@@ -1,0 +1,38 @@
+.email-settings-panel {
+    display: none;
+    width: min(90%, 700px);
+    margin: 16px auto;
+    padding: 20px;
+
+    background-color: var(--bege-lighter);
+    color: var(--dark-gray);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.email-settings-header {
+    margin-bottom: 16px;
+}
+
+#emailSettingsForm {
+    display: grid;
+    gap: 8px;
+}
+
+#emailSettingsForm input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--half-gray);
+    border-radius: 5px;
+}
+
+#emailSettingsForm button {
+    justify-self: start;
+    margin-top: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--blue-light);
+    color: var(--dark-gray);
+    cursor: pointer;
+}
