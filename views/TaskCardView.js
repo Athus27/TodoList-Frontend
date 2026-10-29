@@ -1,4 +1,4 @@
-export function TaskCard(task, recipients = [], isTaskEmailModeOpen = false) {
+export function TaskCardView(task, recipients = [], isTaskEmailModeOpen = false) {
 	return `
         <div class="task-card" data-selected="false">
             <label class="task-selector" title="Selecionar tarefa">

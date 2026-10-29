@@ -1,4 +1,4 @@
-export function Header() {
+export function HeaderView() {
 	return `
         <header class="header">
             

@@ -1,4 +1,4 @@
-import { collectDueEmailNotifications } from "./email-notifications.js";
+import { collectDueEmailNotifications } from "./EmailNotificationService.js";
 
 export async function processDueEmailNotifications({
 	board,

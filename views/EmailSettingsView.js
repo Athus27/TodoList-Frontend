@@ -1,4 +1,4 @@
-export function EmailSettingsPanel() {
+export function EmailSettingsView() {
     return `
         <section class="email-settings-panel">
             <div class="email-settings-header">

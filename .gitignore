@@ -1,0 +1,12 @@
+# IDEs
+.idea/
+.vscode/
+
+# Dependências e saídas locais
+node_modules/
+coverage/
+*.log
+
+# Artefatos internos de planejamento
+.superpowers/
+docs/superpowers/

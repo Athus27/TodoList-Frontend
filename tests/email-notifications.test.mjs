@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
 	collectDueEmailNotifications,
 	getEmailScheduledAt
-} from "../scripts/email/email-notifications.js";
+} from "../services/email/EmailNotificationService.js";
 
 const activeTask = {
 	id: 1,

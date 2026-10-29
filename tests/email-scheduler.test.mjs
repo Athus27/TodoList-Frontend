@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { BoardModel } from "../models/BoardModel.js";
 import { EmailSettingsModel } from "../models/EmailSettingsModel.js";
 import { Task } from "../models/TaskModel.js";
-import { processDueEmailNotifications } from "../scripts/email/email-scheduler.js";
+import { processDueEmailNotifications } from "../services/email/EmailSchedulerService.js";
 
 function createScenario() {
 	const board = new BoardModel();

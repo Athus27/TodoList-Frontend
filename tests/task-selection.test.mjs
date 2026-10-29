@@ -1,7 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { setTaskSelected, updateSelectedTaskIds } from "../scripts/task.js";
+import {
+	TaskController,
+	updateSelectedTaskIds
+} from "../controllers/TaskController.js";
 
 test("adiciona o ID quando a tarefa é marcada", () => {
 	const selectedTaskIds = [];
@@ -40,7 +43,13 @@ test("sincroniza checkbox, data-selected, ícone e array", () => {
 	};
 	const selectedTaskIds = [];
 
-	setTaskSelected(checkbox, selectedTaskIds);
+	const controller = new TaskController({
+		board: {},
+		saveBoard: () => {},
+		render: () => {}
+	});
+	controller.selectedTaskIds = selectedTaskIds;
+	controller.setTaskSelected(checkbox);
 
 	assert.deepEqual(selectedTaskIds, [12]);
 	assert.equal(taskCard.dataset.selected, "true");

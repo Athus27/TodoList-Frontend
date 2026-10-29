@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { Board } from "../components/Board.js";
-import { TaskCard } from "../components/TaskCard.js";
+import { BoardView } from "../views/BoardView.js";
+import { TaskCardView } from "../views/TaskCardView.js";
 
 test("renderiza um botão de destino para cada status", () => {
-	const html = Board([]);
+	const html = BoardView([]);
 
 	assert.equal((html.match(/class="apply-status-btn"/g) || []).length, 3);
 	assert.match(html, /data-status="ToDo"/);
@@ -14,7 +14,7 @@ test("renderiza um botão de destino para cada status", () => {
 });
 
 test("renderiza o botão que abre a configuração de e-mail das tarefas", () => {
-	const html = Board([]);
+	const html = BoardView([]);
 
 	assert.match(html, /class="task-email-mode-btn"/);
 	assert.match(html, /onclick="toggleTaskEmailMode\(\)"/);
@@ -22,7 +22,7 @@ test("renderiza o botão que abre a configuração de e-mail das tarefas", () =>
 });
 
 test("renderiza checkbox identificado pelo ID da tarefa", () => {
-	const html = TaskCard({
+	const html = TaskCardView({
 		id: 42,
 		title: "Estudar",
 		description: "Local Storage",
@@ -36,7 +36,7 @@ test("renderiza checkbox identificado pelo ID da tarefa", () => {
 });
 
 test("o nome da tarefa não é interpolado nos atributos do seletor", () => {
-	const html = TaskCard({
+	const html = TaskCardView({
 		id: 9,
 		title: 'Revisar "contrato"',
 		description: "Teste",
@@ -49,7 +49,7 @@ test("o nome da tarefa não é interpolado nos atributos do seletor", () => {
 });
 
 test("exibe seletor de destinatário e toggle no modo de configuração", () => {
-	const html = TaskCard(
+	const html = TaskCardView(
 		{
 			id: 8,
 			title: "Entregar projeto",
@@ -74,7 +74,7 @@ test("exibe seletor de destinatário e toggle no modo de configuração", () => 
 });
 
 test("oculta os controles de e-mail fora do modo de configuração", () => {
-	const html = TaskCard(
+	const html = TaskCardView(
 		{ id: 8, title: "Tarefa", description: "", dueDate: "", alarms: [] },
 		[],
 		false
@@ -84,7 +84,7 @@ test("oculta os controles de e-mail fora do modo de configuração", () => {
 });
 
 test("exibe indicador quando a tarefa possui aviso de e-mail ativo", () => {
-	const html = TaskCard({
+	const html = TaskCardView({
 		id: 8,
 		title: "Tarefa",
 		description: "",

@@ -1,4 +1,4 @@
-import { EMAILJS_CONFIG } from "./email-config.js";
+import { EMAILJS_CONFIG } from "./EmailConfig.js";
 
 export function buildDeadlineEmailParams(task, recipient) {
 	return {
@@ -18,7 +18,7 @@ export function sendDeadlineEmail(
 ) {
 	if (!config.serviceId || !config.templateId || !config.publicKey) {
 		return Promise.reject(
-			new Error("Configure o EmailJS em scripts/email/email-config.js")
+			new Error("Configure o EmailJS em services/email/EmailConfig.js")
 		);
 	}
 

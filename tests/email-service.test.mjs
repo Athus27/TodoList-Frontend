@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
 	buildDeadlineEmailParams,
 	sendDeadlineEmail
-} from "../scripts/email/email-service.js";
+} from "../services/email/EmailService.js";
 
 const task = {
 	title: "Entregar projeto",

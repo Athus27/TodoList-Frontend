@@ -1,6 +1,6 @@
-import { TaskCard } from "./TaskCard.js";
+import { TaskCardView } from "./TaskCardView.js";
 
-export function Board(tasks, recipients = [], isTaskEmailModeOpen = false) {
+export function BoardView(tasks, recipients = [], isTaskEmailModeOpen = false) {
 	return `
 		<section class="board">
 			<div class="board-header">
@@ -71,6 +71,6 @@ function renderBoardSection(tasks, status, title, className, recipients, isTaskE
 function renderTasksByStatus(tasks, status, recipients, isTaskEmailModeOpen) {
 	return tasks
 		.filter((task) => task.status === status)
-		.map((task) => `<li>${TaskCard(task, recipients, isTaskEmailModeOpen)}</li>`)
+		.map((task) => `<li>${TaskCardView(task, recipients, isTaskEmailModeOpen)}</li>`)
 		.join("");
 }
