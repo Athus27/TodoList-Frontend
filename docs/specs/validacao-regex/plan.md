@@ -1,7 +1,7 @@
 # Plano de implementação — Validação de tarefas (K1-T8)
 
-As tarefas estão ordenadas por dependência. A tarefa 1 está concluída; as
-demais permanecem pendentes.
+As tarefas estão ordenadas por dependência. As tarefas 1 e 2 estão concluídas;
+as demais permanecem pendentes.
 
 ## 1. Criar as regras reutilizáveis de validação
 
@@ -25,7 +25,7 @@ demais permanecem pendentes.
 
 - **Dependências:** tarefa 1, para alinhar os campos e mensagens às regras de
   validação.
-- [ ] **O que será feito:** Adicionar o campo de prioridade ao `#taskForm`,
+- [x] **O que será feito:** Adicionar o campo de prioridade ao `#taskForm`,
   incluindo os atributos nativos adequados, e criar elementos de mensagem
   associados aos campos de prioridade e data. As mensagens devem ser visíveis,
   atualizáveis e identificáveis por tecnologias assistivas, sem alterar os

@@ -94,6 +94,16 @@ h1 {
 	border: 1px solid var(--half-gray);
 	color: white;
 }
+
+.field-error {
+	color: var(--dark-gray);
+	font-size: 0.875rem;
+}
+
+.field-error:not([hidden]) {
+	margin-top: -0.25rem;
+}
+
 .task-list {
 	list-style-type: none;
 }

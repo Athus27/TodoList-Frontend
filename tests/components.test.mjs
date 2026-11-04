@@ -13,6 +13,19 @@ test("renderiza um botão de destino para cada status", () => {
 	assert.match(html, /data-status="Done"/);
 });
 
+test("renderiza prioridade e mensagens associadas no formulário de tarefas", () => {
+	const html = BoardView([]);
+
+	assert.match(html, /id="priority"/);
+	assert.match(html, /name="priority"/);
+	assert.match(html, /inputmode="numeric"/);
+	assert.match(html, /pattern="\[1-5\]"/);
+	assert.match(html, /aria-describedby="priority-error"/);
+	assert.match(html, /id="priority-error" class="field-error" role="alert" hidden/);
+	assert.match(html, /aria-describedby="due-date-error"/);
+	assert.match(html, /id="due-date-error" class="field-error" role="alert" hidden/);
+});
+
 test("renderiza o botão que abre a configuração de e-mail das tarefas", () => {
 	const html = BoardView([]);
 
