@@ -7,6 +7,8 @@ O projeto utiliza HTML, CSS e JavaScript puro. As tarefas e configurações são
 ## Funcionalidades
 
 - Criar, editar e excluir tarefas.
+- Definir prioridade de 1 a 5 ao criar ou editar uma tarefa.
+- Exibir a prioridade como selo ao lado do título no cartão da tarefa.
 - Mover tarefas entre ToDo, Doing e Done.
 - Selecionar várias tarefas e alterar seus status simultaneamente.
 - Criar alarmes por quantidade de minutos antes do prazo.
@@ -14,6 +16,23 @@ O projeto utiliza HTML, CSS e JavaScript puro. As tarefas e configurações são
 - Cadastrar destinatários de e-mail.
 - Escolher um destinatário e ligar ou desligar o aviso de cada tarefa.
 - Enviar um e-mail uma única vez dentro das 24 horas anteriores ao prazo.
+
+### Validação de tarefas
+
+Na criação e na edição, o formulário valida a prioridade e a data de término
+antes de alterar o board ou salvar os dados:
+
+- a prioridade é obrigatória e aceita somente um número inteiro de 1 a 5;
+- a data deve seguir o formato `YYYY-MM-DDTHH:mm`, representar uma data
+  existente e ser posterior ao momento atual;
+- entradas inválidas não são persistidas e exibem uma mensagem junto ao campo;
+- tarefas legadas sem prioridade continuam carregáveis, mas não exibem um selo
+  vazio ou incorreto;
+- tarefas válidas preservam a prioridade no objeto da tarefa e na chave
+  `board` do Local Storage.
+
+O cartão exibe a prioridade no formato `Prioridade N` ao lado do título. Em
+telas pequenas, título e selo podem quebrar linha sem sobreposição.
 
 ## Arquitetura MVC
 
@@ -110,6 +129,20 @@ Execute todos os testes com:
 node --test tests/*.test.mjs
 # Executa os testes dos models, views, controllers e services.
 ```
+
+Os testes cobrem as regras de validação, criação e edição, persistência,
+preservação de alarmes e configurações de e-mail, renderização do selo e
+compatibilidade com tarefas sem prioridade. A suíte validada durante a entrega
+teve **59 testes aprovados e 0 falhas**.
+
+Para uma verificação manual, sirva o projeto com o comando da seção
+[Como executar](#como-executar), abra a aplicação no navegador e confirme:
+
+- criação com prioridades válidas e rejeição de valores fora de 1 a 5;
+- rejeição de formato inválido, data inexistente e data passada;
+- edição válida e preservação dos dados associados;
+- persistência da prioridade após recarregar a página;
+- exibição do selo ao lado do título e sua quebra de linha em largura reduzida.
 
 ## Limitações
 
