@@ -1,6 +1,6 @@
 # Plano de implementação — Validação de tarefas (K1-T8)
 
-As tarefas estão ordenadas por dependência. As tarefas 1, 2 e 3 estão
+As tarefas estão ordenadas por dependência. As tarefas 1, 2, 3 e 4 estão
 concluídas; as demais permanecem pendentes.
 
 ## 1. Criar as regras reutilizáveis de validação
@@ -64,7 +64,7 @@ concluídas; as demais permanecem pendentes.
 
 - **Dependências:** tarefas 1, 2 e 3. O fluxo só deve criar ou atualizar tarefas
   depois que o campo existir na view e o modelo puder armazenar a prioridade.
-- [ ] **O que será feito:** Validar os valores no envio antes de `new Task`,
+- [x] **O que será feito:** Validar os valores no envio antes de `new Task`,
   `board.updateTask` e `saveBoard`. Bloquear a operação quando houver erro,
   exibir a mensagem junto ao campo correspondente, limpar/atualizar mensagens
   quando os dados forem corrigidos e manter os valores anteriores em edições

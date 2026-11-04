@@ -1,6 +1,37 @@
 import { Alarm } from "../models/AlarmModel.js";
 import { Task } from "../models/TaskModel.js";
 import { collectDueAlarms } from "../services/AlarmService.js";
+import {
+	validateDueDate,
+	validatePriority
+} from "../services/TaskValidation.js";
+
+const TASK_FIELD_ERRORS = {
+	priority: {
+		required: "Informe a prioridade.",
+		range: "A prioridade deve ser um número inteiro de 1 a 5."
+	},
+	dueDate: {
+		required: "Informe a data de término.",
+		format: "Informe a data no formato AAAA-MM-DDTHH:MM.",
+		"invalid-date": "Informe uma data de término válida.",
+		past: "A data de término deve ser posterior à data e hora atuais."
+	}
+};
+const TASK_ERROR_IDS = {
+	priority: "priority-error",
+	dueDate: "due-date-error"
+};
+
+function setFieldError(form, fieldName, message) {
+	const errorElement = form.querySelector?.(`#${TASK_ERROR_IDS[fieldName]}`);
+	const field = form.elements[fieldName];
+	if (!errorElement || !field) return;
+
+	errorElement.textContent = message;
+	errorElement.hidden = !message;
+	field.setAttribute?.("aria-invalid", String(Boolean(message)));
+}
 
 export function updateSelectedTaskIds(selectedTaskIds, taskId, isSelected) {
 	const currentIndex = selectedTaskIds.indexOf(taskId);
@@ -63,11 +94,27 @@ export class TaskController {
 		if (form) form.hidden = !form.hidden;
 	}
 
-	handleTaskSubmit(form) {
+	handleTaskSubmit(form, now = new Date()) {
 		const editingId = form.dataset.editingId;
+		const priority = validatePriority(form.elements.priority.value);
+		const dueDate = validateDueDate(form.elements.dueDate.value, now);
+		setFieldError(
+			form,
+			"priority",
+			priority.valid ? "" : TASK_FIELD_ERRORS.priority[priority.error]
+		);
+		setFieldError(
+			form,
+			"dueDate",
+			dueDate.valid ? "" : TASK_FIELD_ERRORS.dueDate[dueDate.error]
+		);
+
+		if (!priority.valid || !dueDate.valid) return false;
+
 		const values = {
 			title: form.elements.title.value,
 			description: form.elements.description.value,
+			priority: priority.value,
 			dueDate: form.elements.dueDate.value
 		};
 
@@ -79,6 +126,7 @@ export class TaskController {
 
 		this.saveBoard(this.board);
 		this.render();
+		return true;
 	}
 
 	handleAlarmSubmit(form, now = new Date()) {
@@ -157,6 +205,7 @@ export class TaskController {
 		const form = this.document.querySelector("#taskForm");
 		form.elements.title.value = task.title;
 		form.elements.description.value = task.description;
+		form.elements.priority.value = task.priority ?? "";
 		form.elements.dueDate.value = task.dueDate;
 		form.dataset.editingId = taskId;
 		form.querySelector('[type="submit"]').textContent = "Save changes";
