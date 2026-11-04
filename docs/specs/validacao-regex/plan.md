@@ -1,7 +1,6 @@
 # Plano de implementação — Validação de tarefas (K1-T8)
 
-As tarefas estão ordenadas por dependência. As tarefas 1 a 5 estão concluídas;
-a tarefa 6 permanece pendente.
+As tarefas estão ordenadas por dependência. Todas as tarefas estão concluídas.
 
 ## 1. Criar as regras reutilizáveis de validação
 
@@ -98,7 +97,7 @@ a tarefa 6 permanece pendente.
 ## 6. Executar verificação manual no navegador
 
 - **Dependências:** tarefa 5.
-- [ ] **O que será feito:** Validar o comportamento integrado em servidor local,
+- [x] **O que será feito:** Validar o comportamento integrado em servidor local,
   cobrindo criação e edição, mensagens junto aos campos, prioridade válida e
   inválida, datas inexistentes e datas passadas. Confirmar a persistência e a
   manutenção de alarmes/configurações de e-mail.
