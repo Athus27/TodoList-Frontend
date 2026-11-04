@@ -28,13 +28,27 @@ export function BoardView(tasks, recipients = [], isTaskEmailModeOpen = false) {
 					<label for="description">Description:</label>
 					<textarea id="description" name="description" required></textarea>
 
+					<label for="priority">Priority:</label>
+					<input
+						type="text"
+						id="priority"
+						name="priority"
+						inputmode="numeric"
+						pattern="[1-5]"
+						required
+						aria-describedby="priority-error"
+					>
+					<small id="priority-error" class="field-error" role="alert" hidden></small>
+
 					<label for="dueDate">Due Date:</label>
 					<input
 						type="datetime-local"
 						id="dueDate"
 						name="dueDate"
 						required
+						aria-describedby="due-date-error"
 					>
+					<small id="due-date-error" class="field-error" role="alert" hidden></small>
 					<button type="submit">Add Task</button>
 				</form>
 			</div>

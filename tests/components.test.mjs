@@ -13,6 +13,20 @@ test("renderiza um botão de destino para cada status", () => {
 	assert.match(html, /data-status="Done"/);
 });
 
+test("renderiza prioridade e mensagens associadas no formulário de tarefas", () => {
+	const html = BoardView([]);
+
+	assert.match(html, /id="priority"/);
+	assert.match(html, /name="priority"/);
+	assert.match(html, /required/);
+	assert.match(html, /inputmode="numeric"/);
+	assert.match(html, /pattern="\[1-5\]"/);
+	assert.match(html, /aria-describedby="priority-error"/);
+	assert.match(html, /id="priority-error" class="field-error" role="alert" hidden/);
+	assert.match(html, /aria-describedby="due-date-error"/);
+	assert.match(html, /id="due-date-error" class="field-error" role="alert" hidden/);
+});
+
 test("renderiza o botão que abre a configuração de e-mail das tarefas", () => {
 	const html = BoardView([]);
 
@@ -33,6 +47,32 @@ test("renderiza checkbox identificado pelo ID da tarefa", () => {
 	assert.match(html, /type="checkbox"/);
 	assert.match(html, /data-task-id="42"/);
 	assert.match(html, /data-selected="false"/);
+});
+
+test("exibe a prioridade ao lado do título do cartão", () => {
+	const html = TaskCardView({
+		id: 42,
+		title: "Estudar",
+		description: "Local Storage",
+		priority: 3,
+		dueDate: "2026-10-25T18:00",
+		alarms: []
+	});
+
+	assert.match(html, /class="task-title-row"/);
+	assert.match(html, /<h2>Estudar<\/h2>\s*<span class="task-priority-badge">Prioridade 3<\/span>/);
+});
+
+test("omite o selo para tarefa sem prioridade", () => {
+	const html = TaskCardView({
+		id: 43,
+		title: "Tarefa legada",
+		description: "Sem prioridade",
+		dueDate: "2026-10-25T18:00",
+		alarms: []
+	});
+
+	assert.doesNotMatch(html, /task-priority-badge/);
 });
 
 test("o nome da tarefa não é interpolado nos atributos do seletor", () => {
