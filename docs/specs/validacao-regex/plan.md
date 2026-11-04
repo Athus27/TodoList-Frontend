@@ -112,3 +112,21 @@ As tarefas estão ordenadas por dependência. Todas as tarefas estão concluída
   - edição inválida não altera a tarefa;
   - edição válida preserva alarmes e configurações de e-mail;
   - recarregar a página mantém a prioridade no `localStorage`.
+
+## 7. Exibir prioridade nos cartões de tarefa
+
+- **Dependências:** tarefas 1 a 6, para que a prioridade esteja validada,
+  armazenada e disponível no cartão.
+- [x] **O que será feito:** Renderizar um selo `Prioridade N` ao lado do título
+  em [TaskCardView.js], preservando os demais conteúdos e controles do cartão.
+  Adicionar estilo compatível com o cartão atual e permitir quebra de linha em
+  telas pequenas. O selo deve ser omitido para tarefas sem prioridade.
+- **Arquivos criados ou alterados:**
+  - Alterar `views/TaskCardView.js`.
+  - Alterar `components/TaskCard.css`.
+  - Atualizar `tests/components.test.mjs`.
+- **Como validar:** Executar `node --test tests/components.test.mjs` e
+  `node --test tests/*.test.mjs`. Verificar no HTML o texto `Prioridade N`,
+  a ausência do selo para prioridade nula e a presença dos conteúdos existentes.
+  Confirmar manualmente em largura reduzida que título e selo podem quebrar
+  linha sem sobreposição.

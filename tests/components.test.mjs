@@ -49,6 +49,32 @@ test("renderiza checkbox identificado pelo ID da tarefa", () => {
 	assert.match(html, /data-selected="false"/);
 });
 
+test("exibe a prioridade ao lado do título do cartão", () => {
+	const html = TaskCardView({
+		id: 42,
+		title: "Estudar",
+		description: "Local Storage",
+		priority: 3,
+		dueDate: "2026-10-25T18:00",
+		alarms: []
+	});
+
+	assert.match(html, /class="task-title-row"/);
+	assert.match(html, /<h2>Estudar<\/h2>\s*<span class="task-priority-badge">Prioridade 3<\/span>/);
+});
+
+test("omite o selo para tarefa sem prioridade", () => {
+	const html = TaskCardView({
+		id: 43,
+		title: "Tarefa legada",
+		description: "Sem prioridade",
+		dueDate: "2026-10-25T18:00",
+		alarms: []
+	});
+
+	assert.doesNotMatch(html, /task-priority-badge/);
+});
+
 test("o nome da tarefa não é interpolado nos atributos do seletor", () => {
 	const html = TaskCardView({
 		id: 9,

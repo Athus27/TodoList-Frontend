@@ -17,7 +17,10 @@ export function TaskCardView(task, recipients = [], isTaskEmailModeOpen = false)
             </label>
             <div class="task-content">
                <div class="task-info">
-                <h2>${task.title}</h2>
+                <div class="task-title-row">
+                    <h2>${task.title}</h2>
+                    ${renderPriorityBadge(task.priority)}
+                </div>
                 <p>${task.description}</p>
                     <p class="task-date">
                         <img
@@ -68,6 +71,12 @@ export function TaskCardView(task, recipients = [], isTaskEmailModeOpen = false)
             </div>
         </div>
     `;
+}
+
+function renderPriorityBadge(priority) {
+	if (priority === null || priority === undefined || priority === "") return "";
+
+	return `<span class="task-priority-badge">Prioridade ${priority}</span>`;
 }
 
 function renderEmailIndicator(task) {

@@ -186,6 +186,50 @@ preferencialmente por meio de estado de erro e associação com a mensagem.
 **Then** a mensagem daquele campo é removida  
 **And** a submissão prossegue se todos os campos forem válidos.
 
+## Exibição da prioridade nos cartões
+
+1. Cada cartão de tarefa deve exibir a prioridade ao lado do título, na mesma
+   linha visual.
+2. A prioridade deve ser apresentada como um selo pequeno no formato
+   `Prioridade N`, em que `N` é o valor armazenado na tarefa.
+3. O título e o selo devem permanecer agrupados sem alterar os controles,
+   descrição, data, alarmes ou configurações de e-mail do cartão.
+4. Em telas pequenas, o título e o selo podem quebrar linha para evitar
+   sobreposição ou estouro horizontal.
+5. O estilo deve reutilizar a identidade visual existente do cartão e manter o
+   selo legível.
+6. Cartões legados sem prioridade não devem exibir um selo vazio ou incorreto.
+
+### Critérios de aceite do cartão
+
+#### Cenário 11 — Exibir prioridade ao lado do título
+
+**Given** que uma tarefa possui prioridade `3`  
+**When** o cartão é renderizado  
+**Then** o título e um selo com o texto `Prioridade 3` aparecem na mesma área
+**And** o selo fica ao lado do título.
+
+#### Cenário 12 — Preservar o conteúdo existente do cartão
+
+**Given** que uma tarefa possui título, descrição, data, alarmes e configurações
+de e-mail  
+**When** o cartão é renderizado  
+**Then** o selo de prioridade é adicionado  
+**And** os demais conteúdos e controles continuam presentes.
+
+#### Cenário 13 — Permitir quebra em telas pequenas
+
+**Given** que o cartão é exibido em uma largura reduzida  
+**When** o título e o selo não couberem na mesma linha  
+**Then** eles podem quebrar linha  
+**And** nenhum conteúdo deve ficar cortado por sobreposição horizontal.
+
+#### Cenário 14 — Omitir selo sem prioridade
+
+**Given** que uma tarefa legada não possui prioridade  
+**When** o cartão é renderizado  
+**Then** nenhum selo vazio ou com valor incorreto é exibido.
+
 ## Impacto nas funcionalidades existentes
 
 - O formulário `#taskForm` ganhará o campo de prioridade e continuará sendo
@@ -203,6 +247,8 @@ preferencialmente por meio de estado de erro e associação com a mensagem.
 - A validação de data pode impedir o salvamento de tarefas que antes eram
   aceitas por não haver validação de domínio. Essa é uma mudança intencional de
   comportamento.
+- Os cartões de tarefa passarão a exibir a prioridade armazenada ao lado do
+  título, sem alterar as ações existentes.
 
 ## Fora do escopo
 
@@ -216,3 +262,4 @@ preferencialmente por meio de estado de erro e associação com a mensagem.
   é impedir o salvamento inválido e apresentar o erro no envio.
 - Migrar ou corrigir automaticamente todos os registros antigos do
   `localStorage`.
+- Alterar regras de prioridade, persistência ou validação já implementadas.
