@@ -1,7 +1,7 @@
 # Plano de implementação — Validação de tarefas (K1-T8)
 
-As tarefas estão ordenadas por dependência. As tarefas 1, 2, 3 e 4 estão
-concluídas; as demais permanecem pendentes.
+As tarefas estão ordenadas por dependência. As tarefas 1 a 5 estão concluídas;
+a tarefa 6 permanece pendente.
 
 ## 1. Criar as regras reutilizáveis de validação
 
@@ -82,7 +82,7 @@ concluídas; as demais permanecem pendentes.
 ## 5. Completar a cobertura de regressão e aceitação
 
 - **Dependências:** tarefas 1 a 4.
-- [ ] **O que será feito:** Incorporar os critérios de aceite da especificação
+- [x] **O que será feito:** Incorporar os critérios de aceite da especificação
   aos testes de componentes, controller e modelo, garantindo que as
   funcionalidades existentes de status, alarmes, e-mail, exclusão e seleção em
   lote não sejam afetadas.

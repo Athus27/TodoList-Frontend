@@ -18,6 +18,7 @@ test("renderiza prioridade e mensagens associadas no formulário de tarefas", ()
 
 	assert.match(html, /id="priority"/);
 	assert.match(html, /name="priority"/);
+	assert.match(html, /required/);
 	assert.match(html, /inputmode="numeric"/);
 	assert.match(html, /pattern="\[1-5\]"/);
 	assert.match(html, /aria-describedby="priority-error"/);

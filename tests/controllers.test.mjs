@@ -138,6 +138,96 @@ test("TaskController preserva tarefa quando a edição é inválida", () => {
 	assert.equal(saveCalls, 0);
 });
 
+test("TaskController edita prioridade e preserva alarmes e e-mail", () => {
+	const board = new BoardModel();
+	board.addTask(new Task({
+		id: 2,
+		title: "Original",
+		description: "Descrição",
+		priority: 2,
+		dueDate: "2026-12-01T10:00",
+		alarms: [{ id: 4, minutesBefore: 15, alarmAt: "2026-12-01T09:45:00.000Z" }],
+		emailNotificationEnabled: true,
+		emailRecipientId: 7
+	}));
+	let saveCalls = 0;
+	const controller = new TaskController({
+		board,
+		saveBoard: () => { saveCalls++; },
+		render: () => {}
+	});
+	const form = createTaskForm({
+		title: "Atualizada",
+		description: "Nova descrição",
+		priority: "5",
+		dueDate: "2026-12-02T11:00"
+	}, 2);
+
+	assert.equal(controller.handleTaskSubmit(form, new Date(2026, 11, 1, 9)), true);
+	const task = board.getTask(2);
+	assert.equal(task.title, "Atualizada");
+	assert.equal(task.priority, 5);
+	assert.equal(task.dueDate, "2026-12-02T11:00");
+	assert.equal(task.alarms.length, 1);
+	assert.equal(task.emailNotificationEnabled, true);
+	assert.equal(task.emailRecipientId, 7);
+	assert.equal(saveCalls, 1);
+});
+
+test("TaskController limpa mensagens quando a submissão seguinte é válida", () => {
+	const board = new BoardModel();
+	const controller = new TaskController({
+		board,
+		saveBoard: () => {},
+		render: () => {}
+	});
+	const form = createTaskForm({
+		title: "Tarefa",
+		description: "Descrição",
+		priority: "0",
+		dueDate: "2026-02-30T10:00"
+	});
+	const now = new Date(2026, 0, 1);
+
+	assert.equal(controller.handleTaskSubmit(form, now), false);
+	assert.equal(form.errors.priority.hidden, false);
+	assert.equal(form.errors.dueDate.hidden, false);
+
+	form.elements.priority.value = "3";
+	form.elements.dueDate.value = "2026-12-01T10:00";
+
+	assert.equal(controller.handleTaskSubmit(form, now), true);
+	assert.equal(form.errors.priority.hidden, true);
+	assert.equal(form.errors.priority.textContent, "");
+	assert.equal(form.errors.dueDate.hidden, true);
+	assert.equal(form.errors.dueDate.textContent, "");
+});
+
+test("TaskController informa formato e passado para datas inválidas", () => {
+	const board = new BoardModel();
+	const controller = new TaskController({
+		board,
+		saveBoard: () => {},
+		render: () => {}
+	});
+	const now = new Date(2026, 10, 1, 10);
+	const form = createTaskForm({
+		title: "Tarefa",
+		description: "Descrição",
+		priority: "3",
+		dueDate: "2026/12/01 10:00"
+	});
+
+	assert.equal(controller.handleTaskSubmit(form, now), false);
+	assert.equal(form.errors.dueDate.textContent,
+		"Informe a data no formato AAAA-MM-DDTHH:MM.");
+
+	form.elements.dueDate.value = "2026-10-01T10:00";
+	assert.equal(controller.handleTaskSubmit(form, now), false);
+	assert.equal(form.errors.dueDate.textContent,
+		"A data de término deve ser posterior à data e hora atuais.");
+});
+
 test("TaskController move as tarefas selecionadas e persiste o board", () => {
 	const board = new BoardModel();
 	board.addTask(new Task({ id: 1, title: "A", status: "ToDo" }));
