@@ -94,9 +94,14 @@ preferencialmente por meio de estado de erro e associação com a mensagem.
 - A edição de uma tarefa existente deve validar os novos dados sem apagar os
   alarmes e as configurações de e-mail já associados, salvo comportamento
   existente explicitamente definido fora desta mudança.
-- Tarefas carregadas anteriormente sem prioridade devem ser tratadas sem
-  quebrar a leitura do board; a regra para compatibilidade de dados legados
-  deve ser definida na implementação sem aceitar uma nova submissão inválida.
+- As tarefas antigas usadas para demonstração devem ser apenas atualizadas para
+  conter uma prioridade válida, preservando seus demais dados.
+- Não é necessário criar uma migração automática para todos os registros antigos
+  já existentes no `localStorage`; dados legados fora da demonstração não fazem
+  parte desta entrega.
+- O carregamento inicial não deve quebrar por causa de uma tarefa antiga sem
+  prioridade, mas uma nova criação ou edição só pode ser salva com prioridade
+  válida.
 
 ## Critérios de aceite
 
@@ -188,6 +193,8 @@ preferencialmente por meio de estado de erro e associação com a mensagem.
 - O `TaskController` deverá validar os dados antes de criar ou atualizar a
   tarefa e deverá controlar a exibição das mensagens.
 - O modelo `Task` e a serialização do board deverão preservar a prioridade.
+- As tarefas antigas usadas na demonstração deverão ser atualizadas com uma
+  prioridade válida antes da entrega; não haverá rotina geral de migração.
 - A persistência continuará sendo feita pela chave `board` do `localStorage`;
   não haverá mudança de mecanismo de armazenamento.
 - Criação, edição, movimentação entre `ToDo`, `Doing` e `Done`, exclusão,
