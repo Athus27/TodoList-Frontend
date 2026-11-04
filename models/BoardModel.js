@@ -127,6 +127,7 @@ export class BoardModel {
 
 		task.title = changes.title;
 		task.description = changes.description;
+		if (Object.hasOwn(changes, "priority")) task.priority = changes.priority;
 		task.dueDate = changes.dueDate;
 
 		return true;

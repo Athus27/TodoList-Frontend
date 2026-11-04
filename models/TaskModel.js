@@ -6,6 +6,7 @@ export class Task {
 	id;
 	title;
 	description;
+	priority;
 	status;
 	alarms;
 
@@ -24,6 +25,7 @@ export class Task {
 
 		this.title = parameters.title || "";
 		this.description = parameters.description || "";
+		this.priority = parameters.priority ?? null;
 		this.dueDate = parameters.dueDate || "";
 		this.status = parameters.status || "ToDo";
 		this.emailNotificationEnabled = parameters.emailNotificationEnabled ?? false;

@@ -1,7 +1,7 @@
 # Plano de implementação — Validação de tarefas (K1-T8)
 
-As tarefas estão ordenadas por dependência. As tarefas 1 e 2 estão concluídas;
-as demais permanecem pendentes.
+As tarefas estão ordenadas por dependência. As tarefas 1, 2 e 3 estão
+concluídas; as demais permanecem pendentes.
 
 ## 1. Criar as regras reutilizáveis de validação
 
@@ -44,7 +44,7 @@ as demais permanecem pendentes.
 
 - **Dependências:** tarefa 1, para definir o formato válido da prioridade; a
   tarefa 4 depende desta etapa.
-- [ ] **O que será feito:** Incluir prioridade no `Task`, preservar o valor no
+- [x] **O que será feito:** Incluir prioridade no `Task`, preservar o valor no
   carregamento inicial feito pelo `script.js`/`AppController` e atualizar a
   prioridade durante edição sem remover alarmes, destinatário ou configuração de
   notificação. As tarefas antigas usadas na demonstração devem ser apenas
